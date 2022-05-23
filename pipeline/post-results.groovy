@@ -65,6 +65,7 @@ node(nodeName) {
             sh script: "rclone sync ${remoteName}://${reportBucket} ${tmpDir} --progress --create-empty-src-dirs"
 
             def metaData = readYaml file: "${tmpDir}/${resultDir}/metadata.yaml"
+            println("metaData is : ${metaData}")
             def copyFiles = "cp -a ${tmpDir}/${resultDir}/results ${rpPreprocDir}/payload/"
             def copyAttachments = "cp -a ${tmpDir}/${resultDir}/attachments ${rpPreprocDir}/payload/"
             def rmTmpDir = "rm -rf ${tmpDir}"
