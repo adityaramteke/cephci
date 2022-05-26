@@ -46,6 +46,10 @@ node(nodeName) {
 
                 // prepare the node
                 sharedLib = load("${env.WORKSPACE}/pipeline/vars/lib.groovy")
+                def msgMap = sharedLib.getCIMessageMap()
+                if (msgMap["pipeline"].containsKey("tags"){
+                    sharedLib = load("${env.WORKSPACE}/pipeline/vars/v3.groovy")
+                }
                 sharedLib.prepareNode()
             }
         }
@@ -92,7 +96,23 @@ node(nodeName) {
             sh script: "rclone purge ${remoteName}:${reportBucket}/${resultDir}"
 
             // Update RH recipe file
-            if ( composeInfo != null && testStatus == "SUCCESS" ){
+            def finalStage = "no"
+            def tags = "no"
+            def check = "no"
+            
+            if (msgMap["pipeline"].containsKey("tags"){
+                tags = "yes"}
+                
+            if (msgMap["pipeline"].containsKey("final_stage"){
+                finalStage = "yes"}
+                
+            if (tags=="no"){
+                check = "yes"}
+
+            if (tags =="yes" and finalStage!="no"){
+                check = "yes"}
+                
+            if ( composeInfo != null && testStatus == "SUCCESS" && check=="yes"){
                 def tierLevel = msgMap["pipeline"]["name"]
                 def rhcsVersion = sharedLib.getRHCSVersionFromArtifactsNvr()
                 majorVersion = rhcsVersion["major_version"]
