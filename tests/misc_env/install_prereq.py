@@ -249,14 +249,14 @@ def setup_subscription_manager(
             if is_production or cloud_type.startswith("ibmc"):
                 command += (
                     "--serverurl=subscription.rhsm.redhat.com:443/subscription"
-                    " --baseurl=https://cdn.redhat.com "
+                    " --baseurl=http://cdn.redhat.com "
                 )
                 username_ = config_["cdn_credentials"]["username"]
                 password_ = config_["cdn_credentials"]["password"]
             else:
                 command += (
                     "--serverurl=subscription.rhsm.stage.redhat.com:443/subscription"
-                    " --baseurl=https://cdn.stage.redhat.com "
+                    " --baseurl=http://cdn.stage.redhat.com "
                 )
                 username_ = config_["stage_credentials"]["username"]
                 password_ = config_["stage_credentials"]["password"]
