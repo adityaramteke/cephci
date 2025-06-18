@@ -348,6 +348,15 @@ def create_smb_cluster(
                 clustering=clustering,
             )
         elif auth_mode == "active-directory":
+            
+            # Check if IP is pingable
+            cmd = f"ping {custom_dns}"
+            out = installer.exec_command(sudo=True, cmd=cmd)
+            
+            # Check ping out
+            log.info(f"#### Ping Out: {out}")
+
+            # Create smb cluster
             CephAdm(installer).ceph.smb.cluster.create(
                 smb_cluster_id,
                 auth_mode,
